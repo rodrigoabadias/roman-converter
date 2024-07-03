@@ -8,6 +8,15 @@
       gtag('js', new Date());
     
       gtag('config', 'G-JE8D4QQGM7');
+      
+      // Function to track button clicks
+      function trackButtonClick() {
+        gtag('event', 'click', {
+          'event_category': 'Button',
+          'event_label': 'Convert Button',
+          'value': 1
+        });
+      }
     </script>
     <script src="romans.js">
     </script>
