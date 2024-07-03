@@ -264,3 +264,27 @@ if (!String.prototype.repeat) {
     return rpt;
   };
 }
+
+const trackEvent = (eventCategory, eventAction, eventLabel) => {
+  gtag('event', eventAction, {
+    'event_category': eventCategory,
+    'event_label': eventLabel
+  });
+};
+
+
+modeCheckbox.addEventListener('change', function(e) {
+  trackEvent('Mode', 'Change', e.target.checked ? 'Integer to Roman' : 'Roman to Integer');
+});
+
+
+convertButton.addEventListener('click', function() {
+  var inputValue = inputArea.value;
+  var conversion = modeCheckbox.checked ? convertIntegerToRoman(inputValue) : convertRomanToInteger(inputValue);
+  if (conversion.result) {
+    trackEvent('Conversion', 'Success', inputValue);
+  } else {
+    trackEvent('Conversion', 'Failure', inputValue);
+  }
+});
+
