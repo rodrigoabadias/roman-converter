@@ -1,10 +1,7 @@
-name: CI/CD Pipeline
+name: CI/CD for Roman Converter
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
@@ -13,41 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v2
       with:
-        node-version: '20'
+        node-version: '14'
 
     - name: Install dependencies
       run: npm install
+
+    - name: Run lint
+      run: npx eslint romans.js tests.js
 
     - name: Run tests
-      run: npx jest
-
-    - name: Lint JavaScript files
-      run: npx eslint .
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-
-    - name: Install dependencies
-      run: npm install
+      run: |
+        npx qunit test.html --reporter=dot
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
